@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "@line/bot-sdk": "^6.2.1",
-    "aws-sdk": "^2.304.0"
+    "aws-sdk": "^2.304.0",
+    "cheerio": "^1.0.0-rc.2"
   }
 }
