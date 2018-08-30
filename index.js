@@ -1,6 +1,7 @@
 const AWS = require('aws-sdk');
 const S3 = new AWS.S3();
 var dynamo = new AWS.DynamoDB.DocumentClient();
+const rp = require('request-promise');
 
 const LINE = require('@line/bot-sdk');
 // Messaging API のアクセストークン
@@ -15,23 +16,31 @@ exports.handler = async function(event) {
   if(event.events[0].message.type === "text"){
     var requestMsg = event.events[0].message.text;
 
-    var responseServer = [
-      {
-        singer: {
-          twitter_url: "https://twitter.com/imasirooo",
-          twitter_name: "imasirooo",
-        },
-        song: {
-          detail_url: "https://hogehoge",
-        }
-      }
-    ]
+    // TODO
+    // userId >> events[0].source.userId 多分
 
     if(requestMsg === "1"){
       // 過去最新の聞いた３件を取得
-      var singerContent = await replySingerContent(responseServer[0].singer, responseServer[0].song);
-      console.log(singerContent);
-      replyMessage.push(singerContent);
+      var options = {
+        method: 'POST',
+        uri: 'http://' + process.env["serverIP"] + "/api/v1/bot/get_liked_song",
+        form: {
+          userId: event.events[0].source.userId,
+          song_count: 3
+        },
+      };
+
+      // サーバーからいいねされた曲を取得
+      var likedInfos = await rp(options);
+      likedInfos = JSON.parse(likedInfos);
+      console.log(likedInfos);
+
+      // 取得した歌たちをメッセに追加
+      for(var likedInfo of likedInfos){
+
+        replyMessage.push(await replySingerContent(likedInfo.singer, likedInfo.song));
+      }
+
     } else if(requestMsg === "2"){
       // 過去最新のいいねの３件を取得
     }
