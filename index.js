@@ -6,6 +6,7 @@ const rp = require('request-promise');
 const { replySingerContent } = require('./functions/replySingerContent.js');
 const { getLatestSongs } = require('./functions/getLatestSongs.js');
 const { getRandomSongs } = require('./functions/getRandomSongs.js');
+const { getHowToUse } = require('./functions/getHowToUse.js');
 
 const LINE = require('@line/bot-sdk');
 // Messaging API のアクセストークン
@@ -29,6 +30,10 @@ exports.handler = async function(event) {
     } else if(requestMsg === "2"){
       // ランダムで１曲取得
       replyMessage = await getRandomSongs(event, 1);
+    } else if(requestMsg === "3"){
+    } else if(requestMsg === "4"){
+      // アプリの使い方を説明
+      replyMessage = await getHowToUse(event);
     }
 
   } else {
