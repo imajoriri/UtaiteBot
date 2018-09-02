@@ -17,14 +17,22 @@ exports.getRandomSongs = async function(event, songCount){
   };
 
   // サーバーからいいねされた曲を取得
-  var infos = await rp(options);
-  infos = JSON.parse(infos);
-  console.log(infos);
+  var infos = await rp(options).then( async likedInfos => {
+    likedInfos = JSON.parse(likedInfos);
+    console.log("---likedInfos---");
+    console.log(likedInfos);
+    for(var likedInfo of likedInfos){
+      replyMessage.push(await replySingerContent(likedInfo.singer, likedInfo.song));
+    }
+  }).catch( err => {
+    console.log(err);
+    replyMessage.push({ 'type': 'text', 'text': "曲を取得することができませんでした。" });
+  });
 
-  // 取得した歌たちをメッセに追加
-  for(var info of infos){
-    replyMessage.push(await replySingerContent(info.singer, info.song));
-  }
+  //// 取得した歌たちをメッセに追加
+  //for(var info of infos){
+  //  replyMessage.push(await replySingerContent(info.singer, info.song));
+  //}
   return replyMessage;
 
 }

@@ -2,7 +2,6 @@ const rp = require('request-promise');
 const { replySingerContent } = require('./replySingerContent.js');
 
 exports.getLatestSongs = async function(event){
-  var replyMessage = [];
   // 過去最新の聞いた３件を取得
   var options = {
     method: 'POST',
@@ -13,14 +12,29 @@ exports.getLatestSongs = async function(event){
     },
   };
 
+  var replyMessage = [];
+
   // サーバーからいいねされた曲を取得
-  var likedInfos = await rp(options);
-  likedInfos = JSON.parse(likedInfos);
-  console.log(likedInfos);
+  var likedInfos = await rp(options).then( async likedInfos => {
+    likedInfos = JSON.parse(likedInfos);
+    console.log("---likedInfos---");
+    console.log(likedInfos);
+    if(likedInfos.length === 0){
+      replyMessage.push({ 'type': 'text', 'text': "曲の履歴が0件でした。" });
+    }
+    for(var likedInfo of likedInfos){
+      replyMessage.push(await replySingerContent(likedInfo.singer, likedInfo.song));
+    }
+  }).catch( err => {
+    console.log(err);
+    replyMessage.push({ 'type': 'text', 'text': "曲を取得することができませんでした。" });
+  });
+  //likedInfos = JSON.parse(likedInfos);
+  //console.log(likedInfos);
 
   // 取得した歌たちをメッセに追加
-  for(var likedInfo of likedInfos){
-    replyMessage.push(await replySingerContent(likedInfo.singer, likedInfo.song));
-  }
+  //for(var likedInfo of likedInfos){
+  //  replyMessage.push(await replySingerContent(likedInfo.singer, likedInfo.song));
+  //}
   return replyMessage;
 }
