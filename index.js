@@ -7,6 +7,7 @@ const { replySingerContent } = require('./functions/replySingerContent.js');
 const { getLatestSongs } = require('./functions/getLatestSongs.js');
 const { getRandomSongs } = require('./functions/getRandomSongs.js');
 const { getHowToUse } = require('./functions/getHowToUse.js');
+const { postMessageLog } = require('./functions/postMessageLog.js');
 
 const LINE = require('@line/bot-sdk');
 // Messaging API のアクセストークン
@@ -20,8 +21,12 @@ exports.handler = async function(event) {
   try{
     // メッセージがテキストだった時
     if(event.events[0].message.type === "text"){
+      // serverにメッセのログを送信
+      postMessageLog(event);
+
       var requestMsg = event.events[0].message.text;
 
+      // TODO メッセージを全て保存
       if(requestMsg === "1"){
         
         replyMessage = await getLatestSongs(event);
@@ -39,6 +44,8 @@ exports.handler = async function(event) {
         // アプリの使い方を説明
         replyMessage = await getHowToUse(event);
 
+      }else{
+        // リッチメニューから以外のアクセス
       }
 
     } else {
