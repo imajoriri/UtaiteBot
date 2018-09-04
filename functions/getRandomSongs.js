@@ -29,10 +29,10 @@ exports.getRandomSongs = async function(event, songCount){
     replyMessage.push({ 'type': 'text', 'text': "曲を取得することができませんでした。" });
   });
 
-  //// 取得した歌たちをメッセに追加
-  //for(var info of infos){
-  //  replyMessage.push(await replySingerContent(info.singer, info.song));
-  //}
+  if(replyMessage.length === 0){
+    replyMessage.push({ 'type': 'text', 'text': "曲を取得することができませんでした。" });
+  }
+
   return replyMessage;
 
 }
