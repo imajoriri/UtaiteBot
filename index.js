@@ -7,6 +7,7 @@ const { replySingerContent } = require('./functions/replySingerContent.js');
 const { getLatestSongs } = require('./functions/getLatestSongs.js');
 const { getRandomSongs } = require('./functions/getRandomSongs.js');
 const { getHowToUse } = require('./functions/getHowToUse.js');
+const { getAllLikedSongs } = require('./functions/getAllLikedSongs.js');
 const { postMessageLog } = require('./functions/postMessageLog.js');
 const { postCreateUser } = require('./functions/postCreateUser.js');
 
@@ -54,6 +55,8 @@ exports.handler = async function(event) {
           // アプリの使い方を説明
           replyMessage = await getHowToUse(event);
 
+        } else if(requestMsg === "5"){
+          replyMessage = await getAllLikedSongs(event);
         }else{
           // リッチメニューから以外のアクセス
         }
@@ -63,7 +66,8 @@ exports.handler = async function(event) {
       }
     }
   }catch(e){
-    replyMessage.push({ 'type': 'text', 'text': "申し訳ございません。エラーが発生しました。" });
+    //replyMessage.push({ 'type': 'text', 'text': "申し訳ございません。エラーが発生しました。" });
+    replyMessage = [{ 'type': 'text', 'text': "申し訳ございません。エラーが発生しました。" }];
     console.log(e)
   }
 
