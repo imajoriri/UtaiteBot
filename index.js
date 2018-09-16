@@ -13,10 +13,15 @@ const { postCreateUser } = require('./functions/postCreateUser.js');
 
 const LINE = require('@line/bot-sdk');
 // Messaging API のアクセストークン
-var channelAccessToken = process.env["channelAccessToken"];
-const LINE_CLIENT = new LINE.Client({channelAccessToken: channelAccessToken});
 
-exports.handler = async function(event) {
+exports.handler = async function(event, context, callback) {
+  const alias = context.invokedFunctionArn.split(':').pop();
+  console.log(alias);
+  const channelAccessToken = process.env["channelAccessToken" + "_" + alias];
+  const LINE_CLIENT = new LINE.Client({channelAccessToken: channelAccessToken});
+
+  const serverIP = process.env["serverIP" + "_" + alias];
+
   let response = { statusCode: 200 };
   var replyMessage = [];
 
@@ -26,7 +31,7 @@ exports.handler = async function(event) {
     // 友達追加された時
     if(event.events[0].type === "follow"){
       // TODO userをcreate
-      postCreateUser(event);
+      postCreateUser(event, serverIP);
       console.log("----------add firend--------");
       replyMessage.push({ 'type': 'text', 'text': "友達追加さんきゅーー！！" });
     }else{
@@ -34,19 +39,19 @@ exports.handler = async function(event) {
       // メッセージがテキストだった時
       if(event.events[0].message.type === "text"){
         // serverにメッセのログを送信
-        postMessageLog(event);
+        postMessageLog(event, serverIP);
 
         var requestMsg = event.events[0].message.text;
 
         if(requestMsg === "1"){
 
-          replyMessage = await getLatestSongs(event);
+          replyMessage = await getLatestSongs(event, serverIP);
           console.log(replyMessage);
 
         } else if(requestMsg === "2"){
 
           // ランダムで１曲取得
-          replyMessage = await getRandomSongs(event, 1);
+          replyMessage = await getRandomSongs(event, serverIP, 1);
 
         } else if(requestMsg === "3"){
 
@@ -56,7 +61,7 @@ exports.handler = async function(event) {
           replyMessage = await getHowToUse(event);
 
         } else if(requestMsg === "5"){
-          replyMessage = await getAllLikedSongs(event);
+          replyMessage = await getAllLikedSongs(event, serverIP);
         }else{
           // リッチメニューから以外のアクセス
         }

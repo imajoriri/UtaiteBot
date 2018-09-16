@@ -1,14 +1,15 @@
 const rp = require('request-promise');
 
-exports.getAllLikedSongs = async function(event){
+exports.getAllLikedSongs = async function(event, serverIP){
   var contents = [];
   var replyMessage = [];
 
   var options = {
     method: 'POST',
-    uri: 'http://' + process.env["serverIP"] + "/api/v1/bot/get_all_liked_songs",
+    uri: 'http://' + serverIP + "/api/v1/bot/get_all_liked_songs",
     form: {
       userId: event.events[0].source.userId,
+      song_count: 5,
     },
   };
 
