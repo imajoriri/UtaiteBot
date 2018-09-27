@@ -80,7 +80,7 @@ exports.getAllLikedSongs = async function(event, serverIP){
         "hero": {
           "type": "image",
           // TODO 石井からもらう画像にする
-          "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/01_1_cafe.png",
+          "url": "https://s3-ap-northeast-1.amazonaws.com/tmp-imajo/IMG_0856.jpg",
           "size": "full",
           "aspectRatio": "20:13",
           "aspectMode": "cover",

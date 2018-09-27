@@ -20,14 +20,14 @@ exports.getLatestSongs = async function(event, serverIP){
     console.log("---likedInfos---");
     console.log(likedInfos);
     if(likedInfos.length === 0){
-      replyMessage.push({ 'type': 'text', 'text': "曲の履歴が0件でした。" });
+      replyMessage.push({ 'type': 'text', 'text': "曲の履歴が0件でした。Clovaスキル版ボイスシンガーで聞いた曲の履歴を確認することができます。" });
     }
     for(var likedInfo of likedInfos){
       replyMessage.push(await replySingerContent(likedInfo.singer, likedInfo.song));
     }
   }).catch( err => {
     console.log(err);
-    replyMessage.push({ 'type': 'text', 'text': "曲を取得することができませんでした。" });
+    replyMessage.push({ 'type': 'text', 'text': "申し訳ありません。曲を取得することができませんでした。" });
   });
   //likedInfos = JSON.parse(likedInfos);
   //console.log(likedInfos);

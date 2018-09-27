@@ -33,7 +33,7 @@ exports.handler = async function(event, context, callback) {
       // TODO userをcreate
       postCreateUser(event, serverIP);
       console.log("----------add firend--------");
-      replyMessage.push({ 'type': 'text', 'text': "友達追加さんきゅーー！！" });
+      //replyMessage.push({ 'type': 'text', 'text': "友達追加ありがとうございます。" });
     }else{
 
       // メッセージがテキストだった時
@@ -43,19 +43,19 @@ exports.handler = async function(event, context, callback) {
 
         var requestMsg = event.events[0].message.text;
 
-        if(requestMsg === "1"){
+        if(requestMsg === "1" || requestMsg === "history"){
 
+          // 履歴を取得
           replyMessage = await getLatestSongs(event, serverIP);
-          console.log(replyMessage);
-
-        } else if(requestMsg === "2"){
+        } else if(requestMsg === "2" || requestMsg === "random"){
 
           // ランダムで１曲取得
           replyMessage = await getRandomSongs(event, serverIP, 1);
+        } else if(requestMsg === "3" || requestMsg === "like"){
 
-        } else if(requestMsg === "3"){
-
-        } else if(requestMsg === "4"){
+          // いいねした曲取得
+          replyMessage = await getAllLikedSongs(event, serverIP);
+        } else if(requestMsg === "4" || requestMsg === "how"){
 
           // アプリの使い方を説明
           replyMessage = await getHowToUse(event);
