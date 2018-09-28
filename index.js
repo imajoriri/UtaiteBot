@@ -63,6 +63,7 @@ exports.handler = async function(event, context, callback) {
         } else if(requestMsg === "5"){
           replyMessage = await getAllLikedSongs(event, serverIP);
         }else{
+          replyMessage.push({ 'type': 'text', 'text': "申し訳ありません。メニューからの入力のみを受け付けております。" });
           // リッチメニューから以外のアクセス
         }
 
