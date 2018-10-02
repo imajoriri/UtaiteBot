@@ -15,7 +15,11 @@ exports.getHowToUse = async function(event){
   })
   replyMessage.push({
     "type": "text",
-    "text": `Clovaに向かって「Clova、ボイスシンガーを開いて」と話しかけて見てください。素敵な出会いが待っていますよ。`
+    "text": `Clovaに向かって「Clova、ボイスシンガーを開いて」と話しかけて見てください。素敵な出会いが待っていますよ。以下の動画で使い方がわかります!`
+  })
+  replyMessage.push({
+    "type": "text",
+    "text": "https://www.youtube.com/watch?v=Gf29xkk8m_k"
   })
 
   return replyMessage;
